@@ -1,13 +1,13 @@
 Package: gsLRT
-Title: What the Package Does (One Line, Title Case)
+Title: Gene Set Enrichment from Likelihood Ratio Statistics
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Jordan",
+           family = "Bryan",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "jordan.bryan@duke.edu",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+Description: This package contains functions for running gsLRT, a method to obtain gene set enrichment scores from likelihood ratio statistics.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
