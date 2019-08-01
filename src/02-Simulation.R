@@ -80,7 +80,7 @@ sim_df <- plyr::adply(1:n_sims, 1, function(sim){
     as.integer()
   
   ## Run MMA
-  presults <- gsHyp::gsHyp(Z, X, G, gene_sets = gene_sets, n_perm = 200, do_par = T)
+  presults <- gsLRT::gsLRT(Z, X, G, gene_sets = gene_sets, n_perm = 200, do_par = T)
   #
   romer_df <- limma::romer(t(G), 
                            gene_sets %>%
@@ -92,8 +92,8 @@ sim_df <- plyr::adply(1:n_sims, 1, function(sim){
     data.frame() %>%
     dplyr::mutate(GS = row.names(.), p = Mixed)
   #
-  gs_hyp_fp <- c()
-  gs_hyp_tp <- c()
+  gs_lrt_fp <- c()
+  gs_lrt_tp <- c()
   romer_fp <- c()
   romer_tp <- c()
   #
@@ -101,16 +101,16 @@ sim_df <- plyr::adply(1:n_sims, 1, function(sim){
   neg <- length(unique(presults$GS)) - pos
   #
   for(alpha in seq(log(0.005), log(1), length.out = 50) %>% exp()){
-    gs_hyp_fp %<>% c(sum(!(presults$GS[presults$p < alpha] %in% e_gene_sets)) / neg)
-    gs_hyp_tp %<>% c(sum((e_gene_sets %in% presults$GS[presults$p < alpha])) / pos)
+    gs_lrt_fp %<>% c(sum(!(presults$GS[presults$p < alpha] %in% e_gene_sets)) / neg)
+    gs_lrt_tp %<>% c(sum((e_gene_sets %in% presults$GS[presults$p < alpha])) / pos)
     romer_fp %<>% c(sum(!(romer_df$GS[romer_df$p < alpha] %in% e_gene_sets)) / neg)
     romer_tp %<>% c(sum((e_gene_sets %in% romer_df$GS[romer_df$p < alpha])) / pos)
   }
   #
   data.frame(sim = 1,
              alpha = seq(log(0.005), log(1), length.out = 50) %>% exp(),
-             gs_hyp_fp = gs_hyp_fp,
-             gs_hyp_tp = gs_hyp_tp,
+             gs_lrt_fp = gs_lrt_fp,
+             gs_lrt_tp = gs_lrt_tp,
              romer_fp = romer_fp,
              romer_tp = romer_tp)
   
@@ -120,9 +120,9 @@ sim_df %>%
   readr::write_tsv("results/tables/simulation_norm.txt")
 #
 rbind(sim_df %>% 
-        dplyr::select(sim, alpha, gs_hyp_tp, gs_hyp_fp) %>% 
-        dplyr::rename(tp = gs_hyp_tp, fp = gs_hyp_fp) %>%
-        dplyr::mutate(type = "gsHyp"),
+        dplyr::select(sim, alpha, gs_lrt_tp, gs_lrt_fp) %>% 
+        dplyr::rename(tp = gs_lrt_tp, fp = gs_lrt_fp) %>%
+        dplyr::mutate(type = "gsLRT"),
       sim_df %>% 
         dplyr::select(sim, alpha, romer_tp, romer_fp) %>% 
         dplyr::rename(tp = romer_tp, fp = romer_fp) %>%
@@ -138,9 +138,9 @@ rbind(sim_df %>%
 ggplot2::ggsave("results/figures/compare_tpr.jpeg", height = 5, width = 6)
 #
 rbind(sim_df %>% 
-        dplyr::select(sim, alpha, gs_hyp_tp, gs_hyp_fp) %>% 
-        dplyr::rename(tp = gs_hyp_tp, fp = gs_hyp_fp) %>%
-        dplyr::mutate(type = "gsHyp"),
+        dplyr::select(sim, alpha, gs_lrt_tp, gs_lrt_fp) %>% 
+        dplyr::rename(tp = gs_lrt_tp, fp = gs_lrt_fp) %>%
+        dplyr::mutate(type = "gsLRT"),
       sim_df %>% 
         dplyr::select(sim, alpha, romer_tp, romer_fp) %>% 
         dplyr::rename(tp = romer_tp, fp = romer_fp) %>%
@@ -156,9 +156,9 @@ rbind(sim_df %>%
 ggplot2::ggsave("results/figures/compare_fpr.jpeg", height = 5, width = 6)
 #
 rbind(sim_df %>% 
-        dplyr::select(sim, alpha, gs_hyp_tp, gs_hyp_fp) %>% 
-        dplyr::rename(tp = gs_hyp_tp, fp = gs_hyp_fp) %>%
-        dplyr::mutate(type = "gsHyp"),
+        dplyr::select(sim, alpha, gs_lrt_tp, gs_lrt_fp) %>% 
+        dplyr::rename(tp = gs_lrt_tp, fp = gs_lrt_fp) %>%
+        dplyr::mutate(type = "gsLRT"),
       sim_df %>% 
         dplyr::select(sim, alpha, romer_tp, romer_fp) %>% 
         dplyr::rename(tp = romer_tp, fp = romer_fp) %>%
