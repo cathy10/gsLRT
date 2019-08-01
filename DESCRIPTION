@@ -6,7 +6,7 @@ Authors@R:
            family = "Bryan",
            role = c("aut", "cre"),
            email = "jordan.bryan@duke.edu",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           comment = c(ORCID = "0000-0002-4984-0516"))
 Description: This package contains functions for running gsLRT, a method to obtain gene set enrichment scores from likelihood ratio statistics.
 License: GPL-3
 Encoding: UTF-8
