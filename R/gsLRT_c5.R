@@ -7,16 +7,7 @@ source('plot_results.R')
 source('chisq_test.R')
 source('enrich_score.R')
 
-## Read R objects
-G <- readRDS("G_jordan.rds")
-Z <- readRDS("Z_jordan.rds")
-X <- readRDS("X_jordan.rds") #good
-gene_sets <- readRDS("gene_sets_jordan.rds") 
 
-#running gsLRT function
-ES_df <- gsLRT(Z, X, G, interaction_term = "sex", gene_sets = gene_sets, n_perm = 200)
-
-########
 G1 <- readRDS("G.rds")
 Z1 <- readRDS("Z.rds")
 X1 <- readRDS("X_sub.rds")
@@ -41,25 +32,25 @@ Matrix_G_final = readRDS("Matrix_G_final.rds")
 Matrix_Z <- as.numeric(unlist(Z1))
 
 # setting up my gene_sets
-gene_sets_c2 <- readRDS("gene_sets_c2.rds")
+gene_sets_c5 <- readRDS("gene_sets_c5.rds")
 
-#change the gene_sets_c2.rds to a list of lists
+#change the gene_sets_c5.rds to a list of lists
 Matrix_gene_sets <- vector(mode = "list", length = 40)
   ##get the list of pathway names
 pathway_name = rep(NA, 40)
-pathway_name = as.character(gene_sets_c2[[1]])
+pathway_name = as.character(gene_sets_c5[[1]])
   ##assembling the pathway names and corresponding proteins 
 for (i in 1:length(pathway_name)){
-  Matrix_gene_sets[[i]] <- as.character(gene_sets_c2[i, 2:length(gene_sets_c2[[i]])])
+  Matrix_gene_sets[[i]] <- as.character(gene_sets_c5[i, 2:length(gene_sets_c5[[i]])])
 }
 names(Matrix_gene_sets) <- pathway_name #rename the lists with pathways
-saveRDS(Matrix_gene_sets, "c2_gene_sets_beforeconvert.rds")
+saveRDS(Matrix_gene_sets, "c5_gene_sets_beforeconvert.rds")
 #need to take out the empty strings
 
 #this one contains empty pathways
-Matrix_gene_sets_converted <- readRDS("Matrix_c2gene_sets_converted.rds")
+Matrix_gene_sets_converted <- readRDS("Matrix_c5gene_sets_converted.rds")
 #this one contains empty pathways
-Matrix_gene_sets_morethan2 <- readRDS("Matrix_gene_sets_morethan2.rds")
+Matrix_gene_sets_morethan2 <- readRDS("Matrix_gene_sets_morethan2_c5.rds")
 
 
 #manipulate Matrix_X to be the same as X_jordan.rds
@@ -68,9 +59,9 @@ Matrix_X1 = Matrix_X[, c(2, 3, 1)]
 colnames(Matrix_X1) = c("sex", "age", "APOE")
 
 #save all the rds files ready to run the gsLRT
-saveRDS(Matrix_X1, "Matrix_X1.rds")
-saveRDS(Matrix_Z, "Matrix_Z.rds")
-saveRDS(Matrix_G_final, "Matrix_G_final.rds")
+saveRDS(Matrix_X1, "Matrix_X1_c5.rds")
+saveRDS(Matrix_Z, "Matrix_Z_c5.rds")
+saveRDS(Matrix_G_final, "Matrix_G_final_c5.rds")
 
 
 #running gsLRT function
